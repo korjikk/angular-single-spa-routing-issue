@@ -6,22 +6,17 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## Reproducing the routing issue
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* Run the app (see the upper section)
+* Go to a child route (ex: http://localhost:4200/first-child )
+* Press the html button (ex: "Second Child") to navigate to another child
+* Go back to the previous child by:
+    * Using the browser navigation buttons
+    * Changing the path manually (ex: from http://localhost:4200/second-child to http://localhost:4200/first-child)
+* Try to next child using the html button (ex: "Second Child")
 
-## Build
+You will see in the console, that the navigation is triggered outside the angular zone.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+This is caused just by importing a function from single-spa, and declaring it in the componing (without calling, see first-child.component.ts, line 16)
+If you comment the line, the bug would not appear.
